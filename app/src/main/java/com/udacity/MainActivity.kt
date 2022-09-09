@@ -10,6 +10,7 @@ import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import kotlinx.android.synthetic.main.activity_main.*
@@ -32,19 +33,32 @@ class MainActivity : AppCompatActivity() {
         registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
 
         custom_button.setOnClickListener {
-            download()
+            when (radioGroup.checkedRadioButtonId) {
+                R.id.choiceGlide -> download(glideURL)
+                R.id.choiceLoadApp -> download(udacityURL)
+                R.id.choiceRetrofit -> download(retrofitURL)
+                else -> Toast.makeText(
+                    applicationContext,
+                    "Please select the file to download",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+            if (downloadID == id) {
+                Log.w("DownloadID = ${downloadID}", id.toString())
+            }
         }
     }
 
-    private fun download() {
+
+    private fun download(url: String) {
         val request =
-            DownloadManager.Request(Uri.parse(URL))
+            DownloadManager.Request(Uri.parse(url))
                 .setTitle(getString(R.string.app_name))
                 .setDescription(getString(R.string.app_description))
                 .setRequiresCharging(false)
@@ -54,13 +68,16 @@ class MainActivity : AppCompatActivity() {
         val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         downloadID =
             downloadManager.enqueue(request)// enqueue puts the download request in the queue.
-        Log.w("HELLO", "CLICKED")
     }
 
     companion object {
-        private const val URL =
+        private const val udacityURL =
             "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter/archive/master.zip"
+        private const val glideURL =
+            "https://github.com/bumptech/glide/archive/master.zip"
+        private const val retrofitURL =
+            "https://github.com/square/retrofit/archive/master.zip"
         private const val CHANNEL_ID = "channelId"
     }
-
 }
+

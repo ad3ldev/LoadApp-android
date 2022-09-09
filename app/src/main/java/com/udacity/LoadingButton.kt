@@ -2,9 +2,14 @@ package com.udacity
 
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.animation.doOnEnd
+import androidx.core.animation.doOnStart
 import androidx.core.content.withStyledAttributes
 import kotlin.properties.Delegates
 
@@ -14,15 +19,41 @@ class LoadingButton @JvmOverloads constructor(
     private var widthSize = 0
     private var heightSize = 0
 
-    private val valueAnimator = ValueAnimator()
-
-    private var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
-
-    }
-
     private var normalColor = 0
     private var loadingColor = 0
     private var buttonString: String = ""
+
+
+    private val valueAnimator = ValueAnimator()
+
+    private var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
+        when (new) {
+            ButtonState.Loading -> {
+                valueAnimator.apply {
+                    duration = 25000
+                    doOnStart {
+                        buttonString = resources.getString(R.string.button_loading)
+                        isEnabled = false
+                    }
+
+                    doOnEnd {
+                        isEnabled = true
+                        buttonString = resources.getString(R.string.button_name)
+                    }
+                    start()
+                }
+            }
+            ButtonState.Clicked -> {
+                buttonState = ButtonState.Loading
+                isEnabled = false
+            }
+            ButtonState.Completed -> {
+                isEnabled = true
+                buttonString = resources.getString(R.string.button_name)
+            }
+        }
+        invalidate()
+    }
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
@@ -49,7 +80,7 @@ class LoadingButton @JvmOverloads constructor(
         canvas?.drawText(
             buttonString,
             widthSize / 2f,
-            heightSize.toFloat() - paint.textSize ,
+            heightSize.toFloat() - paint.textSize,
             paint
         )
     }
