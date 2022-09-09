@@ -14,6 +14,7 @@
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/cloud_download_image"
         app:layout_constraintBottom_toTopOf="@+id/radioGroup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -26,6 +27,7 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_margin="20dp"
+        android:contentDescription="@string/custom_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -38,29 +40,33 @@
         android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         app:layout_constraintBottom_toTopOf="@+id/custom_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView">
 
         <RadioButton
-            android:id="@+id/radioButton"
-            android:layout_width="match_parent"
+            android:id="@+id/choiceGlide"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="RadioButton" />
+            android:minHeight="48dp"
+            android:text="@string/glide_string" />
 
         <RadioButton
-            android:id="@+id/radioButton2"
+            android:id="@+id/choiceLoadApp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="RadioButton" />
+            android:minHeight="48dp"
+            android:text="@string/load_app_string" />
 
         <RadioButton
-            android:id="@+id/radioButton3"
+            android:id="@+id/choiceRetrofit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="RadioButton" />
+            android:minHeight="48dp"
+            android:text="@string/retrofit_string" />
     </RadioGroup>
 
 </androidx.constraintlayout.motion.widget.MotionLayout>
