@@ -109,7 +109,6 @@ class MainActivity : AppCompatActivity() {
         private const val CHANNEL_ID = "channelID"
         private const val NOTIFICATION_ID = 0
         private const val REQUEST_CODE = 0
-        private const val FLAGS = 0
     }
 
     private fun createChannel(channelId: String, channelName: String) {
@@ -165,9 +164,7 @@ class MainActivity : AppCompatActivity() {
                 action
             )
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-
         notify(NOTIFICATION_ID, builder.build())
-
     }
 }
 
