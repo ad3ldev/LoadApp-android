@@ -5,7 +5,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.Rect
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.animation.doOnEnd
@@ -21,22 +21,30 @@ class LoadingButton @JvmOverloads constructor(
 
     private var normalColor = 0
     private var loadingColor = 0
+    private var circleColor = 0
     private var buttonString: String = ""
 
 
-    private val valueAnimator = ValueAnimator()
+    private val valueAnimator = ValueAnimator.ofFloat(0f, 1000f)
+    private var progress = 0f
+    private var progressCircle = RectF()
 
     private var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
         when (new) {
             ButtonState.Loading -> {
                 valueAnimator.apply {
-                    duration = 25000
+                    addUpdateListener {
+                        progress = animatedValue as Float
+                        invalidate()
+                    }
+                    duration = 10000
                     doOnStart {
                         buttonString = resources.getString(R.string.button_loading)
                         isEnabled = false
                     }
 
                     doOnEnd {
+                        progress = 0f
                         isEnabled = true
                         buttonString = resources.getString(R.string.button_name)
                     }
@@ -66,6 +74,7 @@ class LoadingButton @JvmOverloads constructor(
         context.withStyledAttributes(attrs, R.styleable.LoadingButton) {
             normalColor = getColor(R.styleable.LoadingButton_normalColor, 0)
             loadingColor = getColor(R.styleable.LoadingButton_loadingColor, 0)
+            circleColor = getColor(R.styleable.LoadingButton_circleColor, 0)
         }
         buttonString = resources.getString(R.string.button_name)
     }
@@ -73,9 +82,18 @@ class LoadingButton @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        val rect = Rect()
         paint.color = normalColor
         canvas?.drawRect(0f, 0f, widthSize.toFloat(), heightSize.toFloat(), paint)
+
+        if (buttonState == ButtonState.Loading) {
+            paint.color = loadingColor
+            val progressRect = progress / 1000f * widthSize
+            canvas?.drawRect(0f, 0f, progressRect, heightSize.toFloat(), paint)
+            val sweepAngle = progress / 1000f * 360f
+            paint.color = circleColor
+            canvas?.drawArc(progressCircle, 0f, sweepAngle, true, paint)
+        }
+
         paint.color = Color.WHITE
         canvas?.drawText(
             buttonString,
@@ -96,6 +114,24 @@ class LoadingButton @JvmOverloads constructor(
         widthSize = w
         heightSize = h
         setMeasuredDimension(w, h)
+        progressCircle = RectF(
+            w - 250f,
+            h / 2 - 25f,
+            w.toFloat() - 200f,
+            h / 2 + 25f
+        )
+    }
+
+    fun startDownload() {
+        buttonState = ButtonState.Loading
+    }
+
+    fun completeDownload() {
+        val fraction = valueAnimator.animatedFraction
+        valueAnimator.cancel()
+        valueAnimator.setCurrentFraction(fraction + 0.1f)
+        valueAnimator.duration = 1000
+        valueAnimator.start()
     }
 
 }

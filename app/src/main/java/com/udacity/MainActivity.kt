@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                         downloadTitle,
                         success
                     )
-                    custom_button.downloadCompleted()
+                    custom_button.completeDownload()
                 }
             }
         }
