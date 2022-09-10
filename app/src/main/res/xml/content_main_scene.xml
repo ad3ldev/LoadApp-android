@@ -1,38 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MotionScene 
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@id/start"
         motion:duration="1000">
-       <KeyFrameSet>
-       </KeyFrameSet>
+        <KeyFrameSet></KeyFrameSet>
     </Transition>
 
-    <ConstraintSet>
-        <Constraint
-            motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            motion:layout_constraintBottom_toTopOf="@+id/custom_button"
-            motion:layout_constraintTop_toBottomOf="@+id/imageView"
-            motion:layout_constraintHorizontal_bias="0.5"
-            motion:layout_constraintStart_toStartOf="parent"
-            android:id="@+id/radioGroup"
-            android:layout_marginEnd="0dp"
-            android:layout_marginStart="0dp" />
-        <Constraint
-            motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            motion:layout_constraintBottom_toTopOf="@+id/radioGroup"
-            motion:layout_constraintHorizontal_bias="0.5"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintStart_toStartOf="parent"
-            android:id="@+id/imageView"
-            android:layout_marginEnd="0dp" />
+    <ConstraintSet android:id="@+id/start">
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">

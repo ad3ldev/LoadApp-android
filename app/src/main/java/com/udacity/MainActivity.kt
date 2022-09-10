@@ -79,6 +79,7 @@ class MainActivity : AppCompatActivity() {
                         downloadTitle,
                         success
                     )
+                    custom_button.downloadCompleted()
                 }
             }
         }
@@ -86,6 +87,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun download(title: String, description: String, url: String) {
+        custom_button.startDownload()
         val request =
             DownloadManager.Request(Uri.parse(url))
                 .setTitle(title)
